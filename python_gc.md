@@ -57,3 +57,46 @@ While reference counting cannot be disabled, the generational garbage collector 
 
 ### Wrapping up
 Understanding Python garbage collection is crucial for developers, even though Python handles most memory management intricacies. The knowledge of avoiding reference cycles and occasional adjustments to garbage collection behavior can contribute to efficient Python programming.
+
+-------------------------------------------------------------------------------------------------------------------------------------------
+
+**Dismissing Python Garbage Collection at Instagram**:
+**Summary:**
+Instagram achieved a 10% efficiency boost by disabling Python's garbage collection (GC), reducing memory footprint and improving CPU cache hit ratio. The article explores Instagram's web server architecture, memory issues, and experiments to optimize memory usage.
+
+**Web Server Architecture:**
+Instagram's web server uses Django in multi-process mode, with a master process forking worker processes to handle user requests.
+uWSGI with pre-fork mode facilitates memory sharing between master and worker processes.
+Memory Investigation:
+Worker RSS memory grew rapidly after spawning, leading to investigation.
+Shared memory dropped quickly, raising suspicions of Copy-on-Write (CoW) mechanism.
+CoW in Python, driven by reference counting, led to the Copy-on-Read (CoR) phenomenon.
+
+**Attempted Solutions:**
+**Disable Reference Count on Code Objects:**
+Initial attempt involved disabling reference count on PyCodeObjects, but no significant change observed.
+Lack of reliable metrics and proof prompted reconsideration.
+
+**Disable Garbage Collection:**
+Identified GC as a culprit causing memory copying during collection.
+Attempted to disable GC using gc.disable() but faced issues with third-party libraries re-enabling it.
+Using gc.set_threshold(0) successfully disabled GC, significantly increasing shared memory.
+
+**Shutdown GC Completely:**
+Experimented with completely shutting down GC at a larger scale.
+Discovered slowdown during web server restart due to final GC before interpreter shutdown.
+Disabled GC cleanup operations to prevent unnecessary memory copying during shutdown.
+
+**Final Optimization for Shutdown:**
+Ensured no Python cleanup during shutdown by disabling GC and using os._exit(0) in the bootstrapping script.
+Successfully rolled out changes to the entire fleet, achieving a 10% global capacity improvement.
+
+**Gains and Conclusions:**
+Freed up 8GB RAM per server, allowing for more worker processes or lower respawn rates.
+Improved CPU throughput with a 10% increase in instructions per cycle (IPC).
+Disabling GC led to reduced cache-miss rate and better CPU cache hit rate, contributing to IPC improvement.
+
+**Lessons Learned:**
+Continuous testing and experimentation, including consideration for old CPU models.
+Understanding the impact of Python's memory management mechanisms on performance.
+The importance of detailed profiling, investigation, and adjustment for optimal results.
