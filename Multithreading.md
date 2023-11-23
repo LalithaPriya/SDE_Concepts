@@ -129,6 +129,45 @@ class Multithreading_runnable implements Runnable {
     }
  }
 ```
+### User vs Daemon Thread:
+
+| Aspect              | User Thread                     | Daemon Thread                   |
+|---------------------|---------------------------------|---------------------------------|
+| **JVM Behavior**    | Waits for completion.           | Does not wait for completion.   |
+| **Creation**        | Created by the user.            | Created by JVM.                 |
+| **Purpose**         | Used for core tasks.             | Used for supporting tasks.      |
+| **Priority**        | High-priority, therefore are required for running in the foreground. . | Low-priority, therefore are especially required for supporting background tasks like garbage collection, releasing memory of unused objects, etc. |
+
+- But one can only call the setDaemon() method before start() method otherwise it will definitely throw IllegalThreadStateException.
+  
+```
+public class DaemonThread extends Thread 
+{ 
+   public DaemonThread(String name){ 
+       super(name); 
+   } 
+   public void run() 
+  {
+      System.out.println((Thread.currentThread().isDaemon() ? getName() + " is Daemon thread" : getName() + " is User thread"));
+
+  }
+   public static void main(String[] args) 
+   {  
+       DaemonThread t1 = new DaemonThread("t1"); 
+       DaemonThread t2 = new DaemonThread("t2"); 
+       DaemonThread t3 = new DaemonThread("t3");  
+       // Setting user thread t1 to Daemon 
+       t1.setDaemon(true);       
+       // starting first 2 threads  
+       t1.start();  
+       t2.start();   
+       // Setting user thread t3 to Daemon 
+       t3.setDaemon(true);  
+       t3.start();         
+   }  
+}
+```
+
 
 
 
