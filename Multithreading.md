@@ -269,7 +269,8 @@ public static void main(String[] args) {
 }
 ```
 
-### Volatile: used to modify the value of a variable by different threads. It is also used to make classes thread safe. multiple threads can use a method and instance of the classes at the same time without any problem.
+### **Volatile: **
+  used to modify the value of a variable by different threads. It is also used to make classes thread safe. multiple threads can use a method and instance of the classes at the same time without any problem.
 
 - **Visibility:** Ensures changes made by one thread are immediately visible to all other threads.
 
@@ -291,7 +292,7 @@ public static void main(String[] args) {
    }
 ```
 
-** Callable Interface:**
+**Callable Interface:**
    - **Return Result:** The `call()` method in the `Callable` interface returns a result. It is parameterized with a type parameter that represents the type of result it produces.
    - **Throw Exception:** Because `call()` returns a result, it can declare that it may throw checked exceptions. The method signature includes the `throws Exception` clause (or a more specific exception type) to indicate the possibility of throwing an exception.
 
@@ -300,7 +301,7 @@ public static void main(String[] args) {
        V call() throws Exception;
    }
 ```
-**Thread Pool:**
+### **Thread Pool:**
 - A thread pool is a group of pre-instantiated, idle threads which stand ready to be given work. These are preferred over instantiating new threads for each task when there is a large number of short tasks to be done rather than a small number of long ones. This prevents having to incur the overhead of creating a thread a large number of times.
 
 Implementation will vary by environment, you need the following:
