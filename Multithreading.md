@@ -313,3 +313,6 @@ Implementation will vary by environment, you need the following:
 
 - When the pool is handed a Task, it takes a thread from the container (or waits for one to become available if the container is empty), hands it a Task, and meets the barrier. This causes the idle thread to resume execution, invoking the execute() method of the Task it was given. Once execution is complete, the thread hands itself back to the pool to be put into the container for re-use and then meets its barrier, putting itself to sleep until the cycle repeats.
 
+--------------------------
+
+**Thread Starving **: Its a situation where thread basically wont be able to access shared resources, so it cant make progress. It happens with low priority threads as high priority and occupy the resources for too long.
