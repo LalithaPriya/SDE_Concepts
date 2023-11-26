@@ -315,4 +315,149 @@ Implementation will vary by environment, you need the following:
 
 --------------------------
 
-**Thread Starving **: Its a situation where thread basically wont be able to access shared resources, so it cant make progress. It happens with low priority threads as high priority and occupy the resources for too long.
+**Thread Starving**:  Its a situation where thread basically wont be able to access shared resources, so it cant make progress. It happens with low priority threads as high priority and occupy the resources for too long.
+- possible solutions:
+    - use a resource scheduling algorithm with a priority queue that also uses the aging technique. This technique, increases the priority of the waiting process, if any process waits for longer time then it gets more priority as time increases.
+    - follow the round-robin pattern while allocating the resources to a process.
+
+**Livelock**: the states of the processes involved in a live lock scenario constantly change. On the other hand, the processes still depend on each other and can never finish their tasks.
+- Eg: When two people make a call to eachother at same time, then both finds line busy. So, they hung up and attemp to call after same interval of time, this leads to same situation. ---> this goes forever.
+
+
+**CountDownLatch**: It is a synchronization aid in Java used for coordinating threads.
+
+- It is initialized with a count, representing the number of operations threads should wait for. The await method blocks until the count becomes zero, while countDown() decrements the count. Once the count reaches zero, subsequent await calls return immediately, and the count cannot be reset.
+
+- It is versatile, serving as a gate or coordinating actions among threads.
+
+- Threads calling countDown can proceed without waiting, and it prevents threads from passing an await until the count is zero.
+
+import java.util.concurrent.CountDownLatch;
+
+```
+public class CountDownLatchExample {
+    public static void main(String[] args) throws InterruptedException {
+        CountDownLatch latch = new CountDownLatch(3);
+
+        Thread t1 = new Thread(() -> {
+            System.out.println("in thread1");
+            latch.countDown();
+        });
+
+        Thread t2 = new Thread(() -> {
+            System.out.println("in thread2");
+            latch.countDown();
+        });
+        System.out.println(latch.getCount());
+        Thread t3 = new Thread(() -> {
+            System.out.println("in thread3");
+            latch.countDown();
+        });
+
+        t1.start();
+        t2.start();
+        t3.start();
+        System.out.println(latch.getCount());// to get current count 
+        // System.out.println("started thread");
+        // wait for t1, t2, and t3 to complete
+        latch.await();
+        System.out.println("after await");
+    }
+}
+```
+
+the major difference: **CountDownLatch-->NumberOfCalls, CyclicBarrier-->NumberOfThreads**
+
+**CyclicBarrier**: another synchronization aid that allows multiple threads to wait for each other to reach a common point before continuing their execution. 
+- It is initialized with a count, and each time a thread reaches the barrier, the count is decremented by one. Once the count reaches zero, all threads are released and can continue their execution.
+
+```
+import java.util.concurrent.CyclicBarrier;
+
+public class CyclicBarrierExample {
+    public static void main(String[] args) {
+        CyclicBarrier barrier = new CyclicBarrier(2);
+        Thread t1 = new Thread(() -> {
+            try {
+                System.out.println("t1");
+                Thread.sleep(5000); 
+                //barrier.await();
+                barrier.await(2, TimeUnit.SECONDS); // --> causes TimeoutException as it has 5 sec sleep but the await is only waiting for 2 sec
+                System.out.println(" `T1 after` ");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+        Thread t2 = new Thread(() -> {
+            try {
+                System.out.println("t2");
+                barrier.await();
+                System.out.println(" `T2 after` ");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+        Thread t3 = new Thread(() -> {
+            try {
+                // do some work
+                System.out.println("t3");
+                barrier.await();
+                System.out.println(" `T3 after` ");
+                // continue execution
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+        t1.start();
+        t2.start();
+        t3.start();
+    }
+}
+
+```
+
+In a hypothetical theater:
+
+- It is called **Mutex** if only one person is allowed to watch the play.
+- It is called **Semaphore** if N number of people are allowed to watch the play. If anybody leaves the Theater during the play then other person can be allowed to watch the play.
+- It is called **CountDownLatch** if no one is allowed to enter until every person vacates the theater. Here each person has free will to leave the theater.
+- It is called **CyclicBarrier** if the play will not start until every person enters the theater. Here a showman can not start the show until all the persons enter and grab the seat. Once the play is finished the same barrier will be applied for next show.
+
+
+**Preemptive Scheduling** :allow a higher-priority process to interrupt a lower-priority process that is currently running. It ensures that high-priority tasks are executed without delay.
+
+**Non-Preemptive Scheduling**: once a process starts running, it continues to run until it completes or blocks. It ensures that a lower-priority task is not starved of resources and given a chance to complete execution.
+
+**Time Slice Scheduling**: It is a preemptive scheduling algorithm that allocates a fixed time slice to each process. When the time slice is over, the process is put back in the queue and the CPU is allocated to the next process in the queue.
+
+**Round Robin Scheduling**:is similar to time slice scheduling, but it allocates a fixed time slice to each process in a circular manner. Round-robin scheduling ensures that all processes get an equal opportunity to use the CPU.
+
+**Busy spin**, is a technique to wait for events without releasing CPU. It's often done to avoid losing data in CPU cached which is lost if the thread is paused and resumed in some other core.
+
+- So, if you are working on a low latency system where your order processing thread currently doesn't have any order, instead of sleeping or calling wait(), you can just loop and then again check the queue for new messages. It's only beneficial if you need to wait for a very small amount of time e.g. in microseconds or nanoseconds.
+
+```
+ExecutorService executor = Executors.newFixedThreadPool(10);
+    for (int i = 0; i < 10; i++) {
+        Runnable worker = new WorkerThread('' + i);
+        executor.execute(worker);
+    }
+    executor.shutdown();
+    //With this loop, you are looping over till threads doesn't finish.
+    while (!executor.isTerminated());
+```
+
+**ThreadLocal**:  ThreadLocal can be very dangerous when it comes to long running applications and garbage collections. object put in a ThreadLocal context is associated to the thread, and will be garbaged once the thread is dead.
+- Each thread holds an implicit reference to its copy of a ThreadLocal as long as the thread is alive and the ThreadLocal object is accessible; after a thread goes away, all of its copies of ThreadLocal variables are subject to garbage collection (unless other references to these copies exist).
+- So if you use ThreadLocal to store some object instance there is a high risk to have the object stored in the thread local never garbaged when your app runs inside an app server like WebLogic Server, which manage a pool of working thread - even when the class that created this ThreadLocal instance is garbage collected.
+
+- Key Takeaways:
+    - ThreadLocal cleanup is essential in preventing classloading leaks and memory-related issues.
+    - Proper use of the remove() method ensures that references are released when they are no longer needed.
+    - Diagnostic tools help identify and address specific threads and classes contributing to memory retention problems.
+    - Addressing ThreadLocal issues is crucial for maintaining application stability and preventing Out of Memory errors.
+
+private ThreadLocal<Integer> threadLocal = new ThreadLocal<Integer>();   
+use set() and get() to read and write value.
+
+
