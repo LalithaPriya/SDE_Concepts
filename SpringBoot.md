@@ -121,8 +121,6 @@ A web framework within Spring, focused on building web applications and handling
 i.e server.port = 8081 in application.properties file
 
 
-
-
 | **Points** | **@SpringBootApplication** | **@EnableAutoConfiguration** |
 |------------|---------------------------|-------------------------------|
 | **When to use** | When you want to use auto-configuration | When you want to customize auto-configuration |
