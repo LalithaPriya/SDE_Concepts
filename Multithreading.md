@@ -461,3 +461,50 @@ private ThreadLocal<Integer> threadLocal = new ThreadLocal<Integer>();
 use set() and get() to read and write value.
 
 
+-----------------------
+
+# Mutex vs Semaphores
+
+Mutexes and semaphores are synchronization mechanisms used in concurrent programming, but they have key differences:
+
+## Mutex
+
+1. **Mutual Exclusion:**
+   - **Purpose:** Provides mutual exclusion for a shared resource.
+   - **Ownership:** Typically associated with ownership; the thread that locks must unlock.
+
+2. **Lock/Unlock:**
+   - Simple lock and unlock mechanism.
+
+3. **Count:**
+   - Binary (1 for locked, 0 for unlocked).
+
+4. **Use Case:**
+   - Ideal for exclusive access scenarios with clear ownership requirements.
+
+5. **Implementation:**
+   - Simpler and more straightforward.
+
+## Semaphore
+
+1. **Counting Mechanism:**
+   - Supports a counting mechanism; can allow a specified number of threads to access a resource.
+
+2. **Lock/Unlock and Wait/Signal:**
+   - Supports lock/unlock (P/V) and wait/signal operations.
+
+3. **Count:**
+   - Can have a count greater than 1.
+
+4. **Use Case:**
+   - Suitable for scenarios needing more flexible counting, e.g., limiting concurrent access.
+
+5. **Implementation:**
+   - More versatile but requires careful design.
+
+## Summary
+
+- **Mutex:** Simple mutual exclusion, ownership semantics.
+- **Semaphore:** Flexible counting mechanism, supports wait/signal operations.
+
+Choose based on specific synchronization needs.
