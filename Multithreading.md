@@ -4,6 +4,10 @@ ability of a CPU to execute multiple threads independently at the **same time** 
 program into two or more threads to make the execution of the program fast and easy.
 
 
+- Threads share same memory space, which means a thread can access memory from other's thread memory. Processes normally can not.
+- Resources. Resources (memory, handles, sockets, etc) are release at process termination, not thread termination.
+
+
 | Aspect                             | Multithreading                                          | Multiprocessing                                         |
 |------------------------------------|--------------------------------------------------------|----------------------------------------------------------|
 | **Memory Sharing**                 | Threads share the same memory space.                   | Processes have independent memory spaces.                 |
@@ -460,4 +464,8 @@ ExecutorService executor = Executors.newFixedThreadPool(10);
 private ThreadLocal<Integer> threadLocal = new ThreadLocal<Integer>();   
 use set() and get() to read and write value.
 
+
+**Race Condition:**
+
+A race condition is a situation on concurrent programming where two concurrent threads or processes compete for a resource and the resulting final state depends on who gets the resource first.
 
