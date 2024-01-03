@@ -155,3 +155,23 @@ The options for filtering results returned by endpoints are limited, restricting
 ----------
 - Hibernate is choosen as default implementation for JPA. when u add spring-boot-starter-data-jpa.
 - u can override this by providing own JPA prop or hibernate properties in application.properties file.
+
+
+----------------------------------------------------------------------------------
+Questions:
+1. How Spring Handles Concurrent Requests with Singleton Bean Instances?
+
+    A singleton instance in Java denotes that only one instance of a class can be created. Now, let's delve into how Spring manages concurrent requests while utilizing singleton bean instances.
+
+    When a request arrives at a Spring application, the framework promptly creates a thread for that specific request and begins its execution.
+
+    You might wonder if the creation of multiple threads by Spring could lead to a race condition, potentially causing interference with singleton bean instances. The answer, surprisingly, is no.
+
+    In Java, objects are stored in the Java heap, which is a globally shared memory accessible to all running threads within an application.
+
+    When the Spring container creates a bean with a singleton scope, the bean is stored in the heap memory. Remarkably, Spring can utilize the same bean instance across multiple threads. This is feasible due to the fact that, for each thread, Java establishes a private stack memory.
+
+    The stack memory is responsible for storing the states of local variables used within methods during thread execution. Java ensures that threads executing in parallel do not overwrite each other's variables, thus providing a level of thread isolation.
+
+    The second reason multiple threads can safely use beans is that the beans lying in heap memory impose no restrictions or locks at the heap level. As a result, the program counter of each thread can point to the same reference of the bean instance in the heap memory without conflicts.
+
