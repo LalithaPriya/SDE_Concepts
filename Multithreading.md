@@ -63,7 +63,7 @@ class Multithreading_runnable implements Runnable {
 }
 ```
 • The run method in the Runnable interface or the Thread class in Java does not have a specified return type. It is a void method, meaning it does not return any value.
-    Using @Override helps catch these types of errors at compile-time, providing a clear indication that a method is intended to override a method in the superclass.
+    Using @Override helps catch these types of errors at compile-time, providing a clear indication that a method is intended to override a method in the superclass. This helps catch errors early in the development process, making your code more reliable and easier to maintain
 
 • The synchronized block ensures that if one thread is currently executing this block, another thread that wants to execute the same block must wait until the first thread completes. This means that the order in which threads acquire the lock and enter the block is determined by the scheduler and other factors, and it's not guaranteed to be in the order in which threads started.
 
