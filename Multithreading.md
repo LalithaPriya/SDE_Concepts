@@ -171,16 +171,17 @@ public class DaemonThread extends Thread
    }  
 }
 ```
-Wait/Notify vs. Thread.sleep():
+### Wait/Notify vs. Thread.sleep():
 
-Wait/Notify:
-wait() can be "woken up" by another thread calling notify() or notifyAll() on the same monitor object.
-wait() releases the lock and must be called within a synchronized context.
-Spurious wakeups may occur, and it's common to use wait() in a loop with a condition check.
-Thread.sleep():
-sleep() does not release the lock; it simply pauses the thread's execution for a specified time.
-Does not require synchronization and can be called from anywhere.
-No wake-up mechanism like notify(); the thread resumes execution after the specified sleep duration.
+**Wait/Notify:**
+- wait() can be "woken up" by another thread calling notify() or notifyAll() on the same monitor object.
+- wait() **releases the lock and must be called within a synchronized context**.
+- Spurious wakeups may occur, and it's common to use wait() in a loop with a condition check.
+
+**Thread.sleep():**
+- sleep() **does not release the lock**; it simply pauses the thread's execution for a specified time.
+- Does **not require synchronization** and can be called from anywhere.
+- No wake-up mechanism like notify(); the thread resumes execution after the specified sleep duration.
 
 In scenarios where the thread needs to pause without actively participating in synchronization, sleep() is suitable. On the other hand, when synchronization and communication between threads are essential, wait() is the appropriate choice, and it contributes to efficient CPU usage in a multithreaded environment.
 
@@ -209,6 +210,9 @@ In scenarios where the thread needs to pause without actively participating in s
          }
      }
      ```
+- wait() is for instances, not classes. Each object in Java has its own monitor, and wait() operates on that monitor.
+- Unlike objects, classes don't have monitors of their own. So, there's no way to call wait() at the class level.
+- For coordination at the class level, you'd typically use other synchronization constructs or synchronize on a static field or object.
 
 **Thread Class vs. Object Class:**
    - **Thread Class:**
