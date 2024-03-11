@@ -1,6 +1,6 @@
-###SpringBoot Framework:
+### SpringBoot Framework:
 
-- Easy to use -> In spring, need to add congiguration changes in XML file but  in springboot Simply add a annotation in the main application class @SpringBootApplication, to start a web application 
+- Easy to use -> In spring, need to add configuration changes in XML file but  in springboot Simply add a annotation in the main application class @SpringBootApplication, to start a web application 
 
 - Rapid development -->By including this 'spring-boot-starter-data-jpa' in xml, it direclty configures a datasource and JPA
 
@@ -27,7 +27,7 @@ In Configurations:
 -----
 
 - Pom.xml --> project metadata and dependencies
-- application.properties - all the properties to configure as well as evirment properties
+- application.properties - all the properties to configure as well as environment properties
 
 - controller class will have all of the resources for our API.
 
