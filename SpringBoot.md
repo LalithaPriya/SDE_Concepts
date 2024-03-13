@@ -34,6 +34,8 @@ In Configurations:
 - use service for method/ business logic implementation 
 
 ### Dependency Injection 
+- Dependency injection ---> uses @autowired at calling service/component,and  @component in the class ---benifits loosely coupled , for testing u dont need to test each component every time again and again.
+
 by avoiding new class() , we use dependency injection 
 - this can be done by using @Autowired  --> it is intantiated, then we add @component to service class that needs to be intantiated to say that is a bean.
 - both @Component and @Service are used for component scanning and bean creation in a Spring application. @Component is a general-purpose stereotype annotation, while @Service is a specialization of @Component specifically used for service layer components.
