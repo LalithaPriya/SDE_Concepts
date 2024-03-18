@@ -164,3 +164,35 @@ References:
 
 docker run -p 9092:9092 -e KAFKA_ZOOKEEPER_CONNECT=192.168.56.1:2181 -e KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://192.168.56.1:9092 -e KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1 confluentinc/cp-kafka
 
+===========================================================================================================
+Absolutely, let's tailor the scenario to fit the context of vendors submitting bills or claims for approval in the client onboarding portal:
+
+**Scenario**: Real-time Notification System for Vendor Bill/Claim Approval Process
+
+In the client onboarding portal project, we implemented a real-time notification system using Kafka to provide vendors, managers, and clients with instant updates on the status of bills or claims submitted for approval. This system aimed to streamline communication and enhance transparency throughout the approval process.
+
+**Implementation Details**:
+
+1. **Event-Driven Architecture**: We adopted an event-driven architecture to capture and process events related to the bill/claim approval process. Events such as bill submission, approval, or denial were published to Kafka topics.
+
+2. **Kafka Producers**:
+   - When a vendor submitted a bill or claim through the portal, the backend services acted as Kafka producers, publishing relevant events to designated Kafka topics.
+   - For instance, upon bill submission, a "BillSubmittedEvent" message containing details like bill ID, amount, and vendor information was produced and sent to the "bill-events" topic.
+
+3. **Kafka Consumers**:
+   - Consumer services subscribed to the Kafka topics and processed incoming messages in real-time.
+   - Managers responsible for approving bills or claims received notifications upon submission, allowing them to review and take action promptly.
+   - Once a bill was approved or denied, another set of consumer services processed the corresponding events and triggered notifications to the vendors and clients affected by the decision.
+
+4. **Real-time Notifications**:
+   - Vendors received immediate confirmation upon submitting a bill or claim, ensuring they were aware that their request was successfully received.
+   - Managers were promptly notified of pending approvals, enabling them to review and make decisions without delay.
+   - Clients associated with the approved bills received notifications regarding the status update, ensuring transparency and timely communication throughout the process.
+
+**Benefits**:
+
+- **Enhanced Transparency**: Vendors, managers, and clients benefited from real-time updates on the status of bills or claims, fostering transparency and trust in the process.
+- **Efficient Decision-making**: By leveraging Kafka's real-time messaging capabilities, managers could quickly review and approve bills, minimizing processing times and ensuring timely payments to vendors.
+- **Improved User Experience**: Vendors and clients appreciated the proactive communication and transparency provided by the real-time notification system, resulting in a positive user experience.
+
+By incorporating Kafka into the client onboarding portal project for real-time notifications throughout the bill/claim approval process, we demonstrated our ability to implement event-driven architectures and leverage Kafka's messaging capabilities to enhance communication and streamline processes effectively.
