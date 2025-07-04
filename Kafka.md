@@ -72,7 +72,6 @@ Producers can choose to receive acknowledgement of data writes. There are three 
 - But with Key, all the related msgs will be send to one partition.
 - We cannot specify this key goes to this partition but all msgs with this key goes to same partition.
 
-
 ## Consumers:
 Consumers read data from a topic and the topic is going to be identified by itâ€™s name. Consumers automatically know which broker to read from. In case of broker failures, consumers know how to recover (just like producers). Data in overall will be read in order within each partition.
 
@@ -81,7 +80,6 @@ Consumers read data from a topic and the topic is going to be identified by itâ€
 
 for example: topic --> 1
 partition --> 4
-
 If consumers --> 1, then all 4 partitions gives to one consumer. \
 If consumers --> 2, then 2 will be for one consumer and other two will be for 2nd consumer. \
 If consumers --> 3, then 2 partitions may be for one consumer and other two will be for 2nd and 3rd consumer(per one).
